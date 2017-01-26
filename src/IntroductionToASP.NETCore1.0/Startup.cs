@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,7 @@ namespace IntroductionToASP.NETCore1._0
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,14 +41,28 @@ namespace IntroductionToASP.NETCore1._0
                 app.UseDeveloperExceptionPage();
             }
 
-
             //app.UseDirectoryBrowser();
-            
 
-            app.Run(async (context) =>
+            // Routing
+            //var routeBuilder = new RouteBuilder(app);
+            //routeBuilder.MapGet("", context => context.Response.WriteAsync("Hello from Routing"));
+            //routeBuilder.MapGet("maria", context => context.Response.WriteAsync("Hello from Maria's Routing"));
+            //routeBuilder.MapGet("scott/foo", context => context.Response.WriteAsync("Hello from Scott's Routing"));
+            //routeBuilder.MapGet("post/{postNumber:int}", context => context.Response.WriteAsync($"Blog post id: {context.GetRouteValue("postNumber")}"));
+            //app.UseRouter(routeBuilder.Build());            
+            //
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hello World CATCH ALL");
+            //});
+
+            app.UseMvc(routes =>
             {
-                await context.Response.WriteAsync(MariaLib.Class1.Greeting());
+            routes.MapRoute(
+                name: "default",
+                template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }
